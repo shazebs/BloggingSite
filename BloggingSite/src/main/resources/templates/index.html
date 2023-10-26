@@ -11,30 +11,30 @@
 	</style>
 </head>
 
-<body>
+<body class="materialize">
 	<!-- common navbar --> 
 	<nav th:replace="~{layouts/common :: navbar}"></nav>
 	
 	<!-- Welcome message --> 
-	<h1>Welcome to our Blogging Site!</h1>			
+	<h1 class="">Welcome to our Blogging Site!</h1>			
 	
 	<!-- If this if a fresh instance of the page, prompt this --> 
 	<div th:if='${AccessGranted.equals("null")}'>
-		<span style="color:green;">Try logging in, or sign-up for an account <a th:href="@{/sign-up}">here</a>.</span>
+		<span class="" style="color:green;">Try logging in, or sign-up for an account <a th:href="@{/signup}">here</a>.</span>
 	</div>
 	
 	<!-- If user tried to login but failed, prompt this -->
 	<div th:if='${AccessGranted.equals("false")}'>
-		<span style="color:red;">Invalid login, try again or sign-up for an account <a th:href="@{/sign-up}">here</a>.</span>
+		<span class="" style="color:red;">Invalid login, try again or sign-up for an account <a th:href="@{/signup}">here</a>.</span>
 	</div>
 	
 	<!-- If user has already successfully logged in, prompt this --> 
 	<div th:if='${AccessGranted.equals("true")}'>
-		<span style="color:dodgerblue;">You are logged in as '<span th:text="${username}"></span>'. Go to homepage <a th:href="@{/home}">here</a>.</span>
+		<div class="" style="color:dodgerblue;">You are logged in as '<span th:text="${username}"></span>'. Go to homepage <a th:href="@{/home}">here</a>.</div>
 	</div>
 	
 	<!-- Login Form --> 
-	<div style="margin-top:10px;">
+	<div class="" style="margin-top:10px;">
 		<form action="#" th:action="@{/}" th:object="${LoginForm}" method="POST">
 			<!-- username input --> 
 			<label>Username:</label><br/>

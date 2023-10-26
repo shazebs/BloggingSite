@@ -26,4 +26,12 @@ public class LoginForm
 	// Setters
 	public void setUsername(String x) { this.Username = x; }
 	public void setPassword(String x) { this.Password = x; }
+	
+	// methods
+	public String ToString()
+	{
+		return String.format("['Username']=%s, ['Password']=%s", 
+				this.Username, this.Password
+		);
+	}
 }

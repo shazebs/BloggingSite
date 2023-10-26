@@ -11,7 +11,7 @@
 	</style>
 </head>
 
-<body>
+<body class="materialize">
 	<!-- common navbar --> 
 	<nav th:replace="~{layouts/common :: navbar}"></nav>
 	
@@ -22,11 +22,11 @@
 		
 		<form action="#" th:action="@{/home}" th:object="${BlogForm}" method="POST">
 			
-			<label>Blog Content:</label><br/>
-			<textarea style="width:100%;" id="BlogContentInput" type="text" th:field="*{Text}" placeholder="Type your blog content here" required></textarea>
+			<label>Create a Blog</label><br/>
+			<textarea style="width:100%;min-height:300px;margin-top:6px;" id="BlogContentInput" type="text" th:field="*{Text}" placeholder="Type your blog here" required></textarea>
 			
 			<br/>
-			<button id="SubmitBlogButton" type="submit">Submit</button>
+			<button id="SubmitBlogButton" style="margin:5px;" type="submit">Submit</button>
 			
 		</form>
 						
