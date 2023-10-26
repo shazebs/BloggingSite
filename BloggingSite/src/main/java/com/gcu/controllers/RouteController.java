@@ -88,7 +88,7 @@ public class RouteController
 			
 			logger.info("Exiting RouteController:Login() with ['AccessGranted']="+AccessGranted + " and ['Username']="+validUsername);
 			
-			return Index(model);
+			return Home(model);
 		}
 		else 
 		{
@@ -227,8 +227,11 @@ public class RouteController
 		if (AccessGranted.equals("true"))
 		{
 			model.addAttribute("username", validUsername);					 
-			model.addAttribute("blog", database.GET_Blog(id)); 
 		}
+		else {
+			model.addAttribute("username", "unknown");
+		}
+		model.addAttribute("blog", database.GET_Blog(id)); 
 		
 		return "readblog.html";
 	}

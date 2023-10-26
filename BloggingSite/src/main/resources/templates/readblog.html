@@ -13,23 +13,26 @@
 
 <body class="materialize">
 	<nav th:replace="~{layouts/common :: navbar}"></nav>
-	<div th:if='${AccessGranted.equals("true")}'>		
+	<!--<div th:if='${AccessGranted.equals("true")}'>-->
+	<div >				
 		<p>You are logged in as '<span th:text="${username}"></span>'</p>
 
 		<div>			
 			<label>Author: <span th:text="${blog.getUsername()}"></span></label><br/>					
-			<label>Published: <span th:text="${blog.getTimestamp()}"></span></label><hr/>
-			<div style="padding:2px 5%;">
+			<label>Published: <span th:text="${blog.getTimestamp()}"></span></label><br/>
+			<div style="padding:2px 3%;padding-top:7px;">
 				<span th:text="${blog.getBlogText()}"></span><br/>
 			</div>					
 			<hr>
 		</div>	
+		
+		<h3>Comments</h3>
 						
 	</div>
 	
 	<!-- access denied prompt for any unauthorized user accessing homepage --> 
 	<div th:if='${AccessGranted.equals("false") || AccessGranted.equals("null")}'>
-		<p>You do not have permission to view this page. Try logging in <a th:href="@{/}">here</a>.</p>
+		<p>You do not have permission to comment on this page. Try logging in <a th:href="@{/}">here</a>.</p>
 	</div>
 	
 </body>
