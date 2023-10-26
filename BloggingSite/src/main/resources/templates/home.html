@@ -25,7 +25,7 @@
 		<div style="margin-top:15px; display:flex; flex-direction:row; border:2px dashed black; width:100%;">
 			
 			<!-- Here's a section with our blog bookmarks --> 
-			<section id="favorites_tab" style="border:2px dashed red; width:20%;">
+			<section id="favorites_tab" style="border:2px dashed red; min-width:15%;">
 				<h5>Here are your favorites</h5>
 			</section>		
 			
@@ -34,7 +34,7 @@
 				<h5>Here are the published blogs.</h5>
 				
 				<div th:each="blog : ${Blogs}">
-					<span th:text="${blog.getText()}"></span>
+					<pre th:text="${blog.getText()}"></pre>
 					<hr>
 				</div>
 				
