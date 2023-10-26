@@ -12,23 +12,18 @@
 </head>
 
 <body class="materialize">
-	<!-- common navbar --> 
 	<nav th:replace="~{layouts/common :: navbar}"></nav>
-	
-	<!-- if user has successfully logged in prompt --> 
-	<div th:if='${AccessGranted.equals("true")}'>
-		
-		<p>You are successfully logged in as '<span th:text="${username}"></span>'</p>
-		
-		<form action="#" th:action="@{/home}" th:object="${BlogForm}" method="POST">
-			
-			<label>Create a Blog</label><br/>
-			<textarea style="width:100%;min-height:300px;margin-top:6px;" id="BlogContentInput" type="text" th:field="*{BlogText}" placeholder="Type your blog here" required></textarea>
-			
-			<br/>
-			<button id="SubmitBlogButton" style="margin:5px;" type="submit">Submit</button>
-			
-		</form>
+	<div th:if='${AccessGranted.equals("true")}'>		
+		<p>You are logged in as '<span th:text="${username}"></span>'</p>
+
+		<div>			
+			<label>Author: <span th:text="${blog.getUsername()}"></span></label><br/>					
+			<label>Published: <span th:text="${blog.getTimestamp()}"></span></label><hr/>
+			<div style="padding:2px 5%;">
+				<span th:text="${blog.getBlogText()}"></span><br/>
+			</div>					
+			<hr>
+		</div>	
 						
 	</div>
 	

@@ -12,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gcu.models.Blog;
 import com.gcu.models.BlogForm;
 import com.gcu.models.Blogger;
 import com.gcu.models.LoginForm;
@@ -29,18 +31,17 @@ public class RouteController
 	
 	private DatabaseService database;
 	
-	private String validUsername = "shazeb";
-	private String validPassword = "root";
+	private String validUsername;
 	
 	private String AccessGranted = "null"; // state manager for login status
 	
-	private List<BlogForm> publishedBlogs = new ArrayList<>();
+	private List<Blog> publishedBlogs = new ArrayList<>();
 	
 	// Class constructor
 	public RouteController(DataSource datasource)
 	{
 		this.database = new DatabaseService(datasource);
-		publishedBlogs.add(new BlogForm("example blog"));
+		publishedBlogs.add(new Blog(0, "admin", "example blog", "Thu. Oct. 26, 2023 at 1:10PM"));
 	}
 	
 	/**
@@ -78,7 +79,7 @@ public class RouteController
 	{
 		logger.info("Entering RouteController:Login() with ['loginForm']="+loginForm.ToString());	
 		
-		Blogger login_blogger_result = database.GET_LoginBlogger(loginForm); 
+		Blogger login_blogger_result = database.GET_Blogger(loginForm); 
 		
 		if (login_blogger_result != null)
 		{
@@ -100,7 +101,7 @@ public class RouteController
 	}
 	
 	/**
-	 * Route to our homepage.
+	 * Get our homepage.
 	 * @param model
 	 * @return
 	 */
@@ -112,8 +113,9 @@ public class RouteController
 		model.addAttribute("AccessGranted", AccessGranted);		
 		if (AccessGranted.equals("true")) 
 		{
-			model.addAttribute("username", validUsername); 
-			model.addAttribute("Blogs", publishedBlogs);
+			model.addAttribute("username", validUsername);			
+			publishedBlogs = database.GET_Blogs(); 
+			model.addAttribute("Blogs", publishedBlogs);		
 		}
 		
 		logger.info("Exiting RouteController:Home() with ['AccessGranted']=" + AccessGranted); 
@@ -130,11 +132,22 @@ public class RouteController
 	@PostMapping("/home")
 	public String PublishBlog(@ModelAttribute BlogForm blogForm, Model model)
 	{
-		logger.info("Entering RouteController:PublishBlog() with ['Text']="+blogForm.getText());
+		logger.info("Entering RouteController:PublishBlog() with ['username']="+blogForm.getUsername());
 		
 		if (AccessGranted.equals("true"))
 		{
-			publishedBlogs.add(blogForm); 
+			// publishedBlogs.add(blogForm); 
+			
+			blogForm.setUsername(validUsername);
+			
+			if (database.POST_Blog(blogForm))
+			{				
+				logger.info("Blog was saved to database!");
+			}
+			else 
+			{
+				logger.info("Blog was NOT saved to database.");
+			}
 		}
 		
 		logger.info("Exiting RouteController:PublishBlog()"); 
@@ -189,20 +202,34 @@ public class RouteController
 	{		
 		logger.info("Entering RouteController:SignupSubmit() with RegisterForm: "+registerForm.ToString());
 		
-		boolean blogger_signup_result = database.POST_NewBlogger(registerForm); 
+		boolean blogger_signup_result = database.POST_Blogger(registerForm); 
 		
 		logger.info("Exiting RouteController:SignupSubmit() with ['blogger_signup_result']="+blogger_signup_result);
 		
-		if (!blogger_signup_result)
+		if (blogger_signup_result)
 		{
-			return Index(model);
-		}			
-		else
-		{
-			AccessGranted = "true";
-			validUsername = registerForm.getUsername();
+			Blogger login_blogger_result = database.GET_Blogger(new LoginForm(registerForm.getUsername(), registerForm.getPassword1())); 
+			if (login_blogger_result != null)
+			{
+				AccessGranted = "true";
+				validUsername = login_blogger_result.getUsername();
+			}	
 			return Home(model);	
 		}
-				
+		return Index(model);
+	}
+	
+	@GetMapping("/blog/{id}")
+	public String ReadBlog(@PathVariable int id, Model model)
+	{		
+		model.addAttribute("AccessGranted", AccessGranted);
+		
+		if (AccessGranted.equals("true"))
+		{
+			model.addAttribute("username", validUsername);					 
+			model.addAttribute("blog", database.GET_Blog(id)); 
+		}
+		
+		return "readblog.html";
 	}
 }

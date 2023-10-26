@@ -2,21 +2,31 @@ package com.gcu.models;
 
 public class BlogForm 
 {
-	private String Text;
+	private String Username;
+	private String BlogText;
+	private String Timestamp;
 	
 	public BlogForm()
 	{
-		this.Text = "";
+		this.Username = "";
+		this.BlogText = "";
+		this.Timestamp = "";
 	}
 	
-	public BlogForm(String text)
+	public BlogForm(String username, String blogText, String timestamp)
 	{
-		this.Text = text;
+		this.Username = username;
+		this.BlogText = blogText;
+		this.Timestamp = timestamp;
 	}
 	
 	// getters
-	public String getText() { return this.Text; }
+	public String getBlogText() { return this.BlogText; }
+	public String getUsername() { return this.Username; }
+	public String getTimestamp() { return this.Timestamp; }
 	
 	// setters
-	public void setText(String x) { this.Text = x; }
+	public void setBlogText(String x) { this.BlogText = x; }
+	public void setUsername(String x) { this.Username = x; }
+	public void setTimestamp(String x) { this.Timestamp = x; }
 }

@@ -31,8 +31,13 @@
 			<!-- published blogs are listed starting here --> 
 			<section id="published_blogs" style="width:100%;padding:6px;padding-left:10px;">
 				<!--<h5>Here are the published blogs.</h5>-->				
-				<div th:each="blog : ${Blogs}">
-					<div th:text="${blog.getText()}"></div>
+				<div th:each="blog : ${Blogs}">			
+					<label>Author: <span th:text="${blog.getUsername()}"></span></label><br/>					
+					<label>Published: <span th:text="${blog.getTimestamp()}"></span></label><br/>
+					<div style="padding:2px 5%;">
+						<span th:text="${blog.getLimitedBlog()}"></span><br/>
+						<a th:href="@{'/blog/' + ${blog.getBlogId()}}">Read More</a><br/>
+					</div>					
 					<hr>
 				</div>				
 			</section>

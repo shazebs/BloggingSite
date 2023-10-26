@@ -1,5 +1,10 @@
 package com.gcu.services;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -8,7 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 //import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import com.gcu.models.Blog;
+import com.gcu.models.BlogForm;
 import com.gcu.models.Blogger;
 import com.gcu.models.LoginForm;
 import com.gcu.models.RegisterForm;
@@ -26,6 +34,9 @@ public class DatabaseService
 
 	private static Logger logger = LoggerFactory.getLogger(DatabaseService.class);	
 	
+	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a, M-dd-yyyy");
+	private LocalDateTime timestamp;
+	
 	/**
 	 * Class Constructor. 
 	 * @param dataSource
@@ -40,13 +51,12 @@ public class DatabaseService
 	 * @param registerForm
 	 * @return
 	 */
-	public boolean POST_NewBlogger(RegisterForm registerForm)
+	public boolean POST_Blogger(RegisterForm registerForm)
 	{
 		logger.info("Entering DatabaseService:POST_NewBlogger() with RegisterForm: "+registerForm.ToString());
 		
 		int queryResult = -1;	
-		boolean does_username_exist = GET_UsernameExists(registerForm.getUsername()); 
-		
+		boolean does_username_exist = GET_UsernameExists(registerForm.getUsername());		
 		if (!does_username_exist && registerForm.getPassword1().equals(registerForm.getPassword2()))
 		{
 			try {
@@ -68,10 +78,36 @@ public class DatabaseService
 	
 	/**
 	 * 
+	 * @param blogForm
+	 * @return
+	 */
+	public boolean POST_Blog(BlogForm blogForm)
+	{
+		timestamp = LocalDateTime.now();  
+        blogForm.setTimestamp(timestamp.format(formatter));
+        
+		int queryResult = -1;
+		try {
+			String sql = "INSERT INTO blogs (user_name, blog_text, time_stamp) VALUES (?, ?, ?)";
+			queryResult = database.update(sql, blogForm.getUsername(), blogForm.getBlogText(), blogForm.getTimestamp());
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		logger.info("Exiting DatabaseService:POST_Blog() with "+(queryResult > 0));
+		
+		return false; 
+	}
+	
+	/**
+	 * 
 	 * @param loginForm
 	 * @return
 	 */
-	public Blogger GET_LoginBlogger(LoginForm loginForm)
+	public Blogger GET_Blogger(LoginForm loginForm)
 	{
 		logger.info("Entering DatabaseService:GET_LoginBlogger()");
 		
@@ -80,7 +116,6 @@ public class DatabaseService
 			String sql = "SELECT * FROM bloggers WHERE user_name = ? AND pass_word = ?";
 			blogger = database.queryForObject(sql, (rs, rowNum) -> {
 	            Blogger result = new Blogger();	            
-	            result.setBloggerId(rs.getInt("blogger_id"));
 	            result.setUsername(rs.getString("user_name"));
 	            result.setPassword(rs.getString("pass_word"));
 	            return result;
@@ -98,6 +133,67 @@ public class DatabaseService
 
 		}			
 		return blogger;
+	}
+	
+	/**
+	 * Get all published blogs from database.
+	 * @return
+	 */
+	public List<Blog> GET_Blogs()
+	{
+		logger.info("Entering DatabaseService:GET_Blogs()");
+		
+		List<Blog> blogs = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM blogs ORDER BY blog_id DESC";
+			SqlRowSet record = database.queryForRowSet(sql);				
+			while (record.next())
+			{
+				blogs.add(new Blog(
+						record.getInt("blog_id"),
+						record.getString("user_name"),
+						record.getString("blog_text"),
+						record.getString("time_stamp")
+					));
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		logger.info("Exiting DatabaseService:GET_Blogs() with "+blogs.size() + " published blogs."); 
+		
+		return blogs;
+	}
+	
+	/**
+	 * 
+	 * @param blog_id
+	 * @return
+	 */
+	public Blog GET_Blog(int blog_id)
+	{
+		Blog blog = null; 
+		try {
+			String sql = "SELECT * FROM blogs WHERE blog_id = ?";
+			blog = database.queryForObject(sql, (rs, rowNum) -> {
+				Blog result = new Blog();
+	            result.setBlogId(rs.getInt("blog_id"));
+	            result.setUsername(rs.getString("user_name"));
+	            result.setBlogText(rs.getString("blog_text"));
+	            result.setTimestamp(rs.getString("time_stamp"));
+	            return result;
+	        }, blog_id);
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			logger.info("Exiting Database:GET_Blog() with ['blog']=null");
+		}
+		return blog;
 	}
 	
 	/**
