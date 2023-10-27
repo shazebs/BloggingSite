@@ -17,7 +17,7 @@
 	<!-- if user has successfully logged in prompt --> 
 	<div th:if='${AccessGranted.equals("true")}'>
 		
-		<p>You are logged in as '<span th:text="${username}"></span>'</p>
+		<p>You are logged in as '<span th:text="${username}"></span>'</p><hr/>
 		
 		<!--<a th:href="@{/create}" style="border:3px solid limegreen; padding:5px; border-radius:5px;">Create Blog</a>-->
 		

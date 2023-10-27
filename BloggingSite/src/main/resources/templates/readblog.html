@@ -19,9 +19,9 @@
 
 		<div>			
 			<label>Author: <span th:text="${blog.getUsername()}"></span></label><br/>					
-			<label>Published: <span th:text="${blog.getTimestamp()}"></span></label><br/>
-			<div style="padding:2px 3%;padding-top:7px;">
-				<span th:text="${blog.getBlogText()}"></span><br/>
+			<label>Published: <span th:text="${blog.getTimestamp()}"></span></label><hr/>
+			<div style="transform:translateY(-3px)">
+				<span th:text="${blog.getBlogText()}"></span>
 			</div>					
 			<hr>
 		</div>	

@@ -18,15 +18,16 @@
 	<!-- if user has successfully logged in prompt --> 
 	<div th:if='${AccessGranted.equals("true")}'>
 		
-		<p>You are successfully logged in as '<span th:text="${username}"></span>'</p>
+		<p>You are logged in as '<span th:text="${username}"></span>'</p>
 		
 		<form action="#" th:action="@{/home}" th:object="${BlogForm}" method="POST">
 			
 			<label>Create a Blog</label><br/>
 			<textarea style="width:100%;min-height:300px;margin-top:6px;" id="BlogContentInput" type="text" th:field="*{BlogText}" placeholder="Type your blog here" required></textarea>
 			
-			<br/>
-			<button id="SubmitBlogButton" style="margin:5px;" type="submit">Submit</button>
+			<p style="margin-bottom:10px; font-size:smaller;">(Warning: Entering more than 3500 characters may result in your blog not being saved. Submit at your own risk.)</p>
+
+			<button id="SubmitBlogButton" style="margin-top:9px;" type="submit">Submit</button>
 			
 		</form>
 						

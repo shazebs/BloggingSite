@@ -1,6 +1,5 @@
-
+-- Run sql script on MySQL or SQL Server database
 CREATE DATABASE blogsite;
-
 CREATE TABLE blogsite.bloggers (
     user_name VARCHAR(255) PRIMARY KEY,
     pass_word VARCHAR(255) NOT NULL

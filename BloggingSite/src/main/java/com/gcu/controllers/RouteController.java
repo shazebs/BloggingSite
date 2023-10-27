@@ -202,23 +202,29 @@ public class RouteController
 	{		
 		logger.info("Entering RouteController:SignupSubmit() with RegisterForm: "+registerForm.ToString());
 		
-		boolean blogger_signup_result = database.POST_Blogger(registerForm); 
-		
-		logger.info("Exiting RouteController:SignupSubmit() with ['blogger_signup_result']="+blogger_signup_result);
-		
+		boolean blogger_signup_result = database.POST_Blogger(registerForm); 		
 		if (blogger_signup_result)
 		{
+			logger.info("New Blogger signed up! Welcome "+registerForm.getUsername()); 
 			Blogger login_blogger_result = database.GET_Blogger(new LoginForm(registerForm.getUsername(), registerForm.getPassword1())); 
 			if (login_blogger_result != null)
 			{
+				logger.info("Blogger "+login_blogger_result.getUsername()+" successfully logged in.");
 				AccessGranted = "true";
-				validUsername = login_blogger_result.getUsername();
-			}	
-			return Home(model);	
+				validUsername = login_blogger_result.getUsername();	
+				return Home(model);
+			}		
+			logger.info("Blogger "+registerForm.getUsername()+" succeeded in signup but failed to login.");
 		}
-		return Index(model);
+		return Signup(model);
 	}
 	
+	/**
+	 * Open a blog in read mode.
+	 * @param id
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/blog/{id}")
 	public String ReadBlog(@PathVariable int id, Model model)
 	{		
