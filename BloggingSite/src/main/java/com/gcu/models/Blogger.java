@@ -5,8 +5,8 @@ import java.util.List;
 public class Blogger 
 {
 //	public int BloggerId; 
-	public String Username;
-	public String Password; 
+	private String Username;
+	private String Password; 
 	
 //	public String PasswordHash; 
 //	public List<Integer> PublishedBlogIds; 

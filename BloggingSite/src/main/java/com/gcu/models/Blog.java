@@ -4,10 +4,10 @@ import java.util.List;
 
 public class Blog
 {
-	public int BlogId;
-	public String Username; // the author who wrote this blog
-	public String BlogText;		
-	public String Timestamp;
+	private int BlogId;
+	private String Username; // the author who wrote this blog
+	private String BlogText;		
+	private String Timestamp;
 	
 	public Blog()
 	{
