@@ -17,13 +17,20 @@ body {
 	transform: translateY(25px);
 }
 
-/* KEYFRAMES */
-@keyframes Materialize {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0px);
-    }
-  }
+.pre {
+    font-size: 15px;
+	overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+@keyframes Materialize 
+{
+	from {
+	  opacity: 0;
+	}
+	to {
+	  opacity: 1;
+	  transform: translateX(0px);
+	}
+ }
