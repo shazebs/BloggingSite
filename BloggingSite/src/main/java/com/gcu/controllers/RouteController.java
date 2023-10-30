@@ -117,7 +117,11 @@ public class RouteController
 		{
 			model.addAttribute("username", validUsername);			
 			publishedBlogs = database.GET_Blogs(); 
-			model.addAttribute("Blogs", publishedBlogs);		
+			model.addAttribute("Blogs", publishedBlogs);
+			for (Blog blog : publishedBlogs)
+			{
+				blog.CommentCount = database.GET_CommentCount(blog.getBlogId());
+			}
 		}
 		
 		logger.info("Exiting RouteController:Home() with ['AccessGranted']=" + AccessGranted); 

@@ -36,7 +36,7 @@
 					<label>Published: <span th:text="${blog.getTimestamp()}"></span></label><br/>
 					<div style="padding:2px 5%;">
 						<span th:text="${blog.getLimitedBlog()}"></span><br/>
-						<a th:href="@{'/blog/' + ${blog.getBlogId()}}">Read More</a><br/>
+						<a th:href="@{'/blog/' + ${blog.getBlogId()}}">Read More</a> -- Comments (<span th:text="${blog.CommentCount}"></span>) <br/>
 					</div>					
 					<hr>
 				</div>				

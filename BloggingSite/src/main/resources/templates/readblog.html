@@ -39,7 +39,7 @@
 			</form>
 		</div><hr/>
 				
-		<h3 style="margin-top:1%;">Comments</h3>	
+		<h3 style="margin-top:1%;">Comments (<span th:text="${Comments.size()}"></span>)</h3>	
 		<div th:each="comment : ${Comments}" style="padding:1% 5%;">			
 			<label>Author: <span th:text="${comment.getUsername()}"></span></label><br/>					
 			<label>Published: <span th:text="${comment.getTimestamp()}"></span></label><br/>

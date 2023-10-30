@@ -317,4 +317,26 @@ public class DatabaseService
 		logger.info("Exiting Database:GET_CommentExists() as false");
 		return false;
 	}
+	
+	/**
+	 * Get number of comments for a specific blog.
+	 * @param blog_id
+	 * @return
+	 */
+	public int GET_CommentCount(int blog_id)
+	{
+		logger.info("Entering DatabaseService:GET_CommentCount() with ['blog_id']="+blog_id);
+		try
+		{
+			String sql = "SELECT COUNT(*) FROM comments WHERE blog_id LIKE ?;";
+			int count = database.queryForObject(sql, new Object[] { blog_id }, Integer.class);
+			return count;
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }

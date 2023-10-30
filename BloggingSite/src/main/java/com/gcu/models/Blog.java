@@ -8,6 +8,7 @@ public class Blog
 	private String Username; // the author who wrote this blog
 	private String BlogText;		
 	private String Timestamp;
+	public int CommentCount; 
 	
 	public Blog()
 	{
