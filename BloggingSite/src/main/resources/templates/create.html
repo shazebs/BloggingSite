@@ -33,10 +33,7 @@
 						
 	</div>
 	
-	<!-- access denied prompt for any unauthorized user accessing homepage --> 
-	<div th:if='${AccessGranted.equals("false") || AccessGranted.equals("null")}'>
-		<p>You do not have permission to view this page. Try logging in <a th:href="@{/}">here</a>.</p>
-	</div>
+	
 	
 </body>
 </html>

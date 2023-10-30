@@ -18,6 +18,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.gcu.models.Blog;
 import com.gcu.models.BlogForm;
 import com.gcu.models.Blogger;
+import com.gcu.models.Comment;
 import com.gcu.models.LoginForm;
 import com.gcu.models.RegisterForm;
 
@@ -220,6 +221,100 @@ public class DatabaseService
 			e.printStackTrace();
 		}
 		logger.info("Exiting Database:GET_UsernameExists() as false");
+		return false;
+	}
+	
+	/**
+	 * Post a comment to database.
+	 * @param comment
+	 * @return
+	 */
+	public boolean POST_Comment(Comment comment)
+	{
+		logger.info("Entering DatabaseService:POST_Comment()");
+		int queryResult = -1;
+		if (!GET_CommentExists(comment))
+		{		
+			try 
+			{
+				timestamp = LocalDateTime.now();  
+		        comment.setTimestamp(timestamp.format(formatter));
+		        
+				String sql = "INSERT INTO comments (blog_id, user_name, comment_text, time_stamp) VALUES (?, ?, ?, ?)";
+				queryResult = database.update(sql, comment.getBlogId(), comment.getUsername(), comment.getCommentText(), comment.getTimestamp());
+			}
+			catch (Exception e)
+			{
+				logger.error(e.getMessage());
+				e.printStackTrace(); 
+			}
+		}
+		
+		logger.info("Exiting DatabaseService:POST_Comment() with "+(queryResult > 0));
+		
+		return (queryResult > 0);
+	}
+	
+	/**
+	 * Get all comments for a specific blog.
+	 * @param blog_id
+	 * @return
+	 */
+	public List<Comment> GET_Comments(int blog_id)
+	{
+		logger.info("Entering DatabaseService:GET_Comments() with ['blog_id']="+blog_id);
+		
+		List<Comment> comments = new ArrayList<>();		
+		try
+		{
+			String sql = "SELECT * FROM comments WHERE blog_id = ? ORDER BY comment_id DESC";
+			SqlRowSet record = database.queryForRowSet(sql, blog_id);				
+			while (record.next())
+			{
+				comments.add(new Comment(
+						record.getInt("comment_id"),
+						record.getInt("blog_id"),
+						record.getString("user_name"),
+						record.getString("comment_text"),
+						record.getString("time_stamp")
+					));
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage());
+			e.printStackTrace(); 
+		}
+		
+		logger.info("Exiting DatabaseService:GET_Comments() with "+comments.size()+" Comments.");
+		
+		return comments;
+	}
+	
+	/**
+	 * Check if a similar comment already exists in the database.
+	 * @param comment
+	 * @return
+	 */
+	public boolean GET_CommentExists(Comment comment)
+	{
+		logger.info("Entering Database:GET_CommentExists()");
+		try 
+		{
+			String sql = "SELECT COUNT(*) FROM comments WHERE blog_id = ? AND user_name = ? AND comment_text = ?;";
+			int comment_exists_result = database.queryForObject(sql, new Object[] { comment.getBlogId(), comment.getUsername(), comment.getCommentText() }, Integer.class);
+			if (comment_exists_result > 0)
+			{
+				logger.info("Exiting Database:GET_CommentExists() as true");
+				return true;
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		logger.info("Exiting Database:GET_CommentExists() as false");
 		return false;
 	}
 }

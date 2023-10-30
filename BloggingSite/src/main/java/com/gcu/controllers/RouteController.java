@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.gcu.models.Blog;
 import com.gcu.models.BlogForm;
 import com.gcu.models.Blogger;
+import com.gcu.models.Comment;
+import com.gcu.models.CommentForm;
 import com.gcu.models.LoginForm;
 import com.gcu.models.RegisterForm;
 import com.gcu.services.DatabaseService;
@@ -228,17 +230,46 @@ public class RouteController
 	@GetMapping("/blog/{id}")
 	public String ReadBlog(@PathVariable int id, Model model)
 	{		
+		logger.info("Entering RouteController:ReadBlog() with ['BlogId']="+id);
+		
 		model.addAttribute("AccessGranted", AccessGranted);
 		
 		if (AccessGranted.equals("true"))
 		{
-			model.addAttribute("username", validUsername);					 
+			model.addAttribute("username", validUsername);	
 		}
-		else {
+		else 
+		{
 			model.addAttribute("username", "unknown");
 		}
-		model.addAttribute("blog", database.GET_Blog(id)); 
+		
+		Blog blog = database.GET_Blog(id);
+		model.addAttribute("blog", blog); 
+		model.addAttribute("CommentForm", new CommentForm(blog.getBlogId()));
+		model.addAttribute("Comments", database.GET_Comments(id));
 		
 		return "readblog.html";
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param commentForm
+	 * @param model
+	 * @return
+	 */
+	@PostMapping("/blog/{id}")
+	public String PostComment(@PathVariable int id, @ModelAttribute CommentForm commentForm, Model model)
+	{
+		logger.info("Entering DatabaseService:PostComment() with ['CommentText']="+commentForm.getCommentText()+", ['BlogId']="+commentForm.getBlogId());
+		
+		if (AccessGranted.equals("true"))
+		{
+			boolean post_comment_result = database.POST_Comment(new Comment(commentForm.getBlogId(), commentForm.getCommentText(), validUsername));
+			
+			
+		}
+		
+		return ReadBlog(commentForm.getBlogId(), model); 
 	}
 }
