@@ -27,13 +27,16 @@
 			
 			<p style="margin-bottom:10px; font-size:smaller;">(Warning: Entering more than 3500 characters may result in your blog not being saved. Submit at your own risk.)</p>
 
-			<button id="SubmitBlogButton" style="margin-top:9px;" type="submit">Submit</button>
+			<button id="SubmitBlogButton" style="margin-top:9px;" type="submit">Submit</button>			
 			
-		</form>
-						
+		</form>			
+					
 	</div>
 	
-	
+	<!-- access denied prompt for any unauthorized user accessing homepage --> 
+	<div th:if='${AccessGranted.equals("false") || AccessGranted.equals("null")}'>
+		<p>You do not have permission to view this page. Try logging in <a th:href="@{/}">here</a>.</p>
+	</div>
 	
 </body>
 </html>
