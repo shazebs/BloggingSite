@@ -256,7 +256,7 @@ public class RouteController
 	}
 	
 	/**
-	 * 
+	 * Post a new comment to the specified blog.
 	 * @param id
 	 * @param commentForm
 	 * @param model
@@ -270,8 +270,6 @@ public class RouteController
 		if (AccessGranted.equals("true"))
 		{
 			boolean post_comment_result = database.POST_Comment(new Comment(commentForm.getBlogId(), commentForm.getCommentText(), validUsername));
-			
-			
 		}
 		
 		return ReadBlog(commentForm.getBlogId(), model); 
