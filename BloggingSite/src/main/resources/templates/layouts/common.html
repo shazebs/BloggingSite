@@ -4,12 +4,14 @@
 		<link th:href="@{/styles/site.css}" rel="stylesheet"/>
 		<link th:href="@{/styles/index.css}" rel="stylesheet"/>
 	</head>
-	<nav id="navbar" th:fragment="navbar" class="materialize">
+	<nav id="navbar" th:fragment="navbar">
 		<section class="" style="text-align:left;width:100%;margin-bottom:10px;">
-			<a class="custom-nav-link" th:href="@{/home}">Home</a> 
-			<a class="custom-nav-link" th:href="@{/create}">Create</a>
-			<a class="custom-nav-link" th:href="@{/}">Login</a>
-			<a class="custom-nav-link" th:href="@{/signup}">Signup</a>
+			<div class="materialize-align-left">
+				<a class="custom-nav-link" th:href="@{/}">Login</a>
+				<a class="custom-nav-link" th:href="@{/home}">Home</a> 
+				<a class="custom-nav-link" th:href="@{/create}">Create</a>
+				<a class="custom-nav-link" th:href="@{/signup}">Signup</a>
+			</div>
 		</section>
 	</nav>
 </html>

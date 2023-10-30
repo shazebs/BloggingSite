@@ -11,9 +11,10 @@
 	</style>
 </head>
 
+<!-- common navbar --> 
+<nav th:replace="~{layouts/common :: navbar}"></nav>
+	
 <body class="materialize">
-	<!-- common navbar --> 
-	<nav th:replace="~{layouts/common :: navbar}"></nav>
 	
 	<!-- Welcome message --> 
 	<h1>Register as a Blogger!</h1>			
@@ -29,7 +30,7 @@
 		<label style="margin-top:10px">Re-type Password</label><br/>
 		<input id="RegisterPassword2Input" type="password" th:field="*{Password2}" placeholder="Re-type password here" required />
 		<br/>
-		<button id="RegisterUserSubmit" type="submit" style="margin:10px;">Register</button>
+		<button id="RegisterUserSubmit" type="submit" style="margin:10px;margin-left:0;">Register</button>
 	</form>	
 	
 </body>

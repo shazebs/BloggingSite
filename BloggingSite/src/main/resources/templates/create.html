@@ -11,9 +11,10 @@
 	</style>
 </head>
 
+<!-- common navbar --> 
+<nav th:replace="~{layouts/common :: navbar}"></nav>
+
 <body class="materialize">
-	<!-- common navbar --> 
-	<nav th:replace="~{layouts/common :: navbar}"></nav>
 	
 	<!-- if user has successfully logged in prompt --> 
 	<div th:if='${AccessGranted.equals("true")}'>
