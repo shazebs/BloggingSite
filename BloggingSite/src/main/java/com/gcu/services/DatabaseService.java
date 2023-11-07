@@ -23,24 +23,38 @@ import com.gcu.models.LoginForm;
 import com.gcu.models.RegisterForm;
 
 /**
- * 
+ * This class contain Data-Layer helper functions for interacting with our SQL database.
  * @author Shazeb Suhail
  *
  */
 public class DatabaseService 
 {
+	
 	@Autowired
 	@SuppressWarnings("unused")
+	/**
+	 * This is our database object.
+	 */
 	private JdbcTemplate database; 
 
+	/**
+	 * This is our logging object.
+	 */
 	private static Logger logger = LoggerFactory.getLogger(DatabaseService.class);	
 	
+	/**
+	 * This is our global Datetime formatting object.
+	 */
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a, M-dd-yyyy");
+	
+	/**
+	 * Object for time stamping logs
+	 */
 	private LocalDateTime timestamp;
 	
 	/**
 	 * Class Constructor. 
-	 * @param dataSource
+	 * @param dataSource 
 	 */
 	public DatabaseService(DataSource dataSource)
 	{
@@ -49,8 +63,8 @@ public class DatabaseService
 	
 	/**
 	 * Register a new Blogger in the database.
-	 * @param registerForm
-	 * @return
+	 * @param registerForm a form submitted by register blogger page
+	 * @return true or false if Blogger was registered
 	 */
 	public boolean POST_Blogger(RegisterForm registerForm)
 	{
@@ -78,9 +92,9 @@ public class DatabaseService
 	}
 	
 	/**
-	 * 
-	 * @param blogForm
-	 * @return
+	 * Post a new Blog to the database.
+	 * @param blogForm a form submitted by blog create page
+	 * @return true or false if Blog was posted
 	 */
 	public boolean POST_Blog(BlogForm blogForm)
 	{
@@ -104,9 +118,9 @@ public class DatabaseService
 	}
 	
 	/**
-	 * 
-	 * @param loginForm
-	 * @return
+	 * Get a Blogger from the database.
+	 * @param loginForm a login form submitted by the login page
+	 * @return a Blogger object or null
 	 */
 	public Blogger GET_Blogger(LoginForm loginForm)
 	{
@@ -138,7 +152,7 @@ public class DatabaseService
 	
 	/**
 	 * Get all published blogs from database.
-	 * @return
+	 * @return a list of all blogs saved in the database
 	 */
 	public List<Blog> GET_Blogs()
 	{
@@ -170,9 +184,9 @@ public class DatabaseService
 	}
 	
 	/**
-	 * 
-	 * @param blog_id
-	 * @return
+	 * Get a Blog by searching for its ID in the database.
+	 * @param blog_id an integer value for the blog's id
+	 * @return a Blog object or null
 	 */
 	public Blog GET_Blog(int blog_id)
 	{
@@ -198,9 +212,9 @@ public class DatabaseService
 	}
 	
 	/**
-	 * Return true or false if username already exists in database.
-	 * @param username
-	 * @return
+	 * Check if username already exists in the database.
+	 * @param username the username to check for
+	 * @return true or false if username already exists in database
 	 */
 	public boolean GET_UsernameExists(String username)
 	{
@@ -225,9 +239,9 @@ public class DatabaseService
 	}
 	
 	/**
-	 * Post a comment to database.
-	 * @param comment
-	 * @return
+	 * Post a comment to the database.
+	 * @param comment try to save this comment object to the database
+	 * @return true or false if comment was saved
 	 */
 	public boolean POST_Comment(Comment comment)
 	{
@@ -248,17 +262,15 @@ public class DatabaseService
 				logger.error(e.getMessage());
 				e.printStackTrace(); 
 			}
-		}
-		
-		logger.info("Exiting DatabaseService:POST_Comment() with "+(queryResult > 0));
-		
+		}		
+		logger.info("Exiting DatabaseService:POST_Comment() with "+(queryResult > 0));		
 		return (queryResult > 0);
 	}
 	
 	/**
 	 * Get all comments for a specific blog.
-	 * @param blog_id
-	 * @return
+	 * @param blog_id the blog id to look up in database
+	 * @return a list of comments associated with the specified blog's id
 	 */
 	public List<Comment> GET_Comments(int blog_id)
 	{
@@ -293,8 +305,8 @@ public class DatabaseService
 	
 	/**
 	 * Check if a similar comment already exists in the database.
-	 * @param comment
-	 * @return
+	 * @param comment the comment to check for in the database
+	 * @return true or false if comment already exists
 	 */
 	public boolean GET_CommentExists(Comment comment)
 	{
@@ -320,8 +332,8 @@ public class DatabaseService
 	
 	/**
 	 * Get number of comments for a specific blog.
-	 * @param blog_id
-	 * @return
+	 * @param blog_id the specified blog's id 
+	 * @return the number of comments for a specific blog's id
 	 */
 	public int GET_CommentCount(int blog_id)
 	{

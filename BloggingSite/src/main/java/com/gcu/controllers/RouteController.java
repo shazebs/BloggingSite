@@ -25,21 +25,42 @@ import com.gcu.models.LoginForm;
 import com.gcu.models.RegisterForm;
 import com.gcu.services.DatabaseService;
 
+/**
+ * Here is our controller for navigating across page routes on our web application.
+ */
 @Controller
 @RequestMapping("/")
 public class RouteController 
 {
+	/**
+	 * logging object
+	 */
 	private Logger logger = LoggerFactory.getLogger(RouteController.class);
 	
+	/**
+	 * database object
+	 */
 	private DatabaseService database;
 	
+	/**
+	 * Username session variable.
+	 */
 	private String validUsername;
 	
+	/**
+	 * Session authorization-level.
+	 */
 	private String AccessGranted = "null"; // state manager for login status
 	
+	/**
+	 * List for holding Blog objects.
+	 */
 	private List<Blog> publishedBlogs = new ArrayList<>();
 	
-	// Class constructor
+	/**
+	 *  Class constructor.
+	 * @param datasource 
+	 */
 	public RouteController(DataSource datasource)
 	{
 		this.database = new DatabaseService(datasource);
@@ -48,8 +69,8 @@ public class RouteController
 	
 	/**
 	 * Our landing page endpoint.
-	 * @param model
-	 * @return
+	 * @param model 
+	 * @return the landing page
 	 */
 	@GetMapping("/")
 	public String Index(Model model)
@@ -72,9 +93,9 @@ public class RouteController
 	
 	/**
 	 * Handle a login form submit.
-	 * @param loginForm
+	 * @param loginForm login form submission from user
 	 * @param model
-	 * @return
+	 * @return the home page or back to login
 	 */
 	@PostMapping("/")
 	public String Login(@ModelAttribute LoginForm loginForm, Model model)
@@ -105,7 +126,7 @@ public class RouteController
 	/**
 	 * Get our homepage.
 	 * @param model
-	 * @return
+	 * @return home page
 	 */
 	@GetMapping("/home")
 	public String Home(Model model)
@@ -131,9 +152,9 @@ public class RouteController
 	
 	/**
 	 * Publish a new blog and view it on homepage.
-	 * @param blogForm
+	 * @param blogForm blog form submission from user
 	 * @param model
-	 * @return
+	 * @return home page with new blog added
 	 */
 	@PostMapping("/home")
 	public String PublishBlog(@ModelAttribute BlogForm blogForm, Model model)
@@ -141,9 +162,7 @@ public class RouteController
 		logger.info("Entering RouteController:PublishBlog() with ['username']="+blogForm.getUsername());
 		
 		if (AccessGranted.equals("true"))
-		{
-			// publishedBlogs.add(blogForm); 
-			
+		{			
 			blogForm.setUsername(validUsername);
 			
 			if (database.POST_Blog(blogForm))
@@ -164,7 +183,7 @@ public class RouteController
 	/**
 	 * Create page for blog.
 	 * @param model
-	 * @return
+	 * @return the create blog page
 	 */
 	@GetMapping("/create")
 	public String Create(Model model)
@@ -181,9 +200,9 @@ public class RouteController
 	}
 	
 	/**
-	 * Signup page for new blogger.
+	 * Signup page for a new blogger.
 	 * @param model
-	 * @return
+	 * @return the signup page
 	 */
 	@GetMapping("/signup")
 	public String Signup(Model model)
@@ -199,9 +218,9 @@ public class RouteController
 	
 	/**
 	 * Handle new blogger register form.
-	 * @param registerForm
+	 * @param registerForm a registration form submitted by the user
 	 * @param model
-	 * @return
+	 * @return the home page or back to signup page
 	 */
 	@PostMapping("/signup")
 	public String SignupSubmit(@ModelAttribute RegisterForm registerForm, Model model)
@@ -227,9 +246,9 @@ public class RouteController
 	
 	/**
 	 * Open a blog in read mode.
-	 * @param id
+	 * @param id open this blog id in viewing page
 	 * @param model
-	 * @return
+	 * @return the viewing page
 	 */
 	@GetMapping("/blog/{id}")
 	public String ReadBlog(@PathVariable int id, Model model)
@@ -257,10 +276,10 @@ public class RouteController
 	
 	/**
 	 * Post a new comment to the specified blog.
-	 * @param id
-	 * @param commentForm
+	 * @param id the blog id to post the comment to
+	 * @param commentForm a comment form submission by the user
 	 * @param model
-	 * @return
+	 * @return the same blog viewing page but with addition of the new comment
 	 */
 	@PostMapping("/blog/{id}")
 	public String PostComment(@PathVariable int id, @ModelAttribute CommentForm commentForm, Model model)
